@@ -1,0 +1,48 @@
+
+:root {
+  --ff-body: "Crimson Pro", serif;
+  --fs-body: 16px; 
+  --flh-body: 1.5em;
+  --color: #333;
+  --ff-heading: "Montserrat", sans-serif;
+  --fw-heading: 300;
+  --ff-light: "Montserrat", sans-serif;
+  --fw-light: 300;
+
+  --link: blue;
+  --link-hover: darkBlue;
+
+  --transparent-white: #ffffffb5;
+  --transparent-white-border: #ffffff40;
+  --transparent-bg: #ffffff8c;
+
+  --gray-icon: #808080;
+  --gray-icon-border: #80808038;
+  --icon: #808080;
+  --icon-border:#80808042;
+
+  --warning: #c0392b;
+  --green: #16a085;
+
+  --md-breakpoint: 940px;
+  --sm-breakpoint: 640px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: var(--fs-body);
+  font-family: var(--ff-body);
+  line-height: var(--flh-body);
+  color: var(--color);
+}
+
+h1,
+h2,
+h3, 
+h4, 
+h5, 
+h6 {
+  font-weight: var(--fw-heading);
+  font-family: var(--ff-heading);
+}
