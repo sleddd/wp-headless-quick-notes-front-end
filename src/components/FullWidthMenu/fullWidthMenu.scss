@@ -11,6 +11,31 @@
     z-index: 99;
     color: #fff;
 
+    #logoutForm {
+      max-width: 320px;
+      padding: 2rem;
+      font-family: 'Montesserat', sans-serif;
+      font-weight: 400;
+
+      button {
+        border: 0;
+        outline: 0;
+        color: #fff;
+        background: #8b5e93;
+        text-transform: uppercase;
+        margin-top: .5rem;
+        padding: 0.5rem;
+        max-width: 100px;
+        border-radius: 3px;
+        font-weight: 200;
+        font-size: .8rem;
+        letter-spacing: .06rem;
+        &:hover {
+          background: #724b78;
+        }
+      }
+    }
+
     #loginForm {
       max-width: 320px;
       display: flex;

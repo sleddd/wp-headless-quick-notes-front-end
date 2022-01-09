@@ -1,6 +1,8 @@
 import React from "react";
 import { gql, useMutation } from "@apollo/client";
-import { GET_USER, AuthProvider } from "../../hooks/use-auth";
+
+import useAuth, { GET_USER, AuthProvider } from "../../hooks/use-auth";
+import { Logout } from "../../components/Auth/Logout";
 
 const LOG_IN = gql`
   mutation logIn($login: String!, $password: String!) {
@@ -13,36 +15,42 @@ const LOG_IN = gql`
   }
 `;
 
+
 export default function LogInForm() {
+  const { loggedIn } = useAuth();
   const [logIn, { data, query, loading, error }] = useMutation(LOG_IN, {
     refetchQueries: [
       { query: GET_USER }
     ],
   });
-  function handleSubmit(event) {
+
+
+  const handleSubmit = (event) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const { email, password } = Object.fromEntries(formData);
+    const formData            = new FormData(event.currentTarget);
+    const { username, password } = Object.fromEntries(formData);
     logIn({
       variables: {
-        login: email,
+        login: username,
         password,
       }
     }).catch(error => {
       console.error(error);
     });
   }
-
+ 
+ 
   return (
     <AuthProvider>
+      { ! loggedIn ?
       <form id="loginForm" method="post" onSubmit={handleSubmit}>
         <h1>Login</h1>
         <label>Username:</label>
-        <input type="email" name="email" id="email" autoComplete="email" />
+        <input type="text" name="username" id="username" autoComplete="username" />
         <label>Password:</label>
         <input type="password" name="password" id="password" autoComplete="password" />
         <input type="submit"></input>
-      </form>
+      </form> : <Logout/> }
     </AuthProvider>
   );
 }

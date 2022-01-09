@@ -20,9 +20,9 @@
                 width: calc(100% - 1rem);
                 div { 
                     display: inline;
-                    border: 2px solid #fff;
+                    border: 2px solid #ccc;
                     &:hover {
-                        border-color: #ccc;
+                        border-color: #fff;
                     }
                 }
             }

@@ -17,6 +17,7 @@ export const GET_USER = gql`
       databaseId
       firstName
       lastName
+      nicename
       email
       capabilities
     }

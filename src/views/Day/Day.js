@@ -1,7 +1,7 @@
 /*
 * External Dependencies
 */
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { graphql } from "@apollo/react-hoc";
 import { compose } from 'recompose';
 
@@ -26,7 +26,12 @@ const Day = ({
   match: { params: { day, month, year } } }) => {
 
   const { user, loggedIn, loading } = useAuth();
-  const journal = journalQuery.journals ? journalQuery.journals.nodes : [];
+  let journal = journalQuery.journals ? journalQuery.journals.nodes : [];
+
+  useEffect(() => {
+    journalQuery.refetch();
+  }, [createJournal, updateJournal, deleteJournal])
+
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
@@ -41,60 +46,69 @@ const Day = ({
       let id = ''
       let title = '';
       let topicId = '';
+      let titleElement = null;
+      let idElement = null;
 
       inputs.forEach(input => {
-        if (input.id.indexOf('entry-title') != -1) {
+        if (input.id.indexOf('item-title') != -1) {
           title = input.value;
+          titleElement = input;
         }
-        if (input.id.indexOf('entry-id') != -1) {
+        if (input.id.indexOf('item-id') != -1) {
           id = input.value;
+          idElement = input;
         }
-        if (input.classList.contains('selected-topic')) {
+        if (input.classList.contains('topicPicker__selected-topic')) {
           topicId = input.value;
         }
       });
       entries.push({
         id: id,
         title: title,
-        topicId: topicId
+        topicId: topicId,
+        idElement: idElement,
+        titleElement: titleElement
       });
     });
 
     // Post entries 
     entries.forEach(entry => {
-      if (entry.id.length > 0) {
-        if (0 && entry.title.length > 0 && entry.topicId.length > 0) {
-          // Update entry 
-          updateJournal({
-            variables: {
-              id: entry.id,
-              journal_entry_field_title: entry.title,
-              topicId: entry.topicId
-            },
-          });
-        }
+      console.log(entry.title,entry.topicId);
+      if (entry.id.length > 1) {
+        // Update entry 
+        updateJournal({
+          variables: {
+            id: entry.id,
+            topicId: entry.topicId,
+            journal_entry_field_title: entry.title,
+          },
+        });
+        journalQuery.refetch();
       } else {
-        if (entry.title.length > 1 && entry.topicId.length > 1) {
-          createJournal({
+        if (entry.title.length > 1 ) {
+          // Create entry
+          const test = createJournal({
             variables: {
-              id: entry.id,
               journal_entry_field_title: entry.title,
               topicId: entry.topicId,
               title: `Journal Item Dated ${new Date()}`
             }
           });
+          entry.idElement.value = "";
+          entry.titleElement.value = "";
+          journalQuery.refetch();
         }
       }
     });
   }
 
-  const deleteJournalHandler = (e) => {
-    const idToRemove = e.target.getAttribute('data-id');
+  const deleteItemHandler = (e) => {
     deleteJournal({
       variables: {
-        id: idToRemove
+        id: e.target.value
       }
     });
+    journalQuery.refetch();
   }
 
   return (
@@ -104,7 +118,10 @@ const Day = ({
       <form method="post" onSubmit={onSubmitHandler}>
         <div className="day">
           <h1>{months[month - 1]} {day}, {year}</h1>
-          <Journal journal={journal} />
+          <Journal
+            journal={journal}
+            deleteItemHandler={deleteItemHandler}
+          />
           <input type="submit" value="Submit" />
         </div>
       </form>
