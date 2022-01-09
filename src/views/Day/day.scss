@@ -21,41 +21,6 @@
         font-weight: 500;
         color: #fff;
     }
-    
-    ul {
-        margin: 0;
-        padding: 0;
-        li {
-            position: relative;
-            list-style-type: none;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            padding: .6rem;
-            background: #ededed;
-            border-radius: 2px;
-            margin-bottom: 8px;
-            .topic {
-                padding: 0;                
-                svg {
-                    height: .9rem;
-                }
-            }
-            .entry {
-                width: 100%;
-                margin-left: 2.5rem;
-                border-left: 1px solid #ccc;
-                padding-left: 1rem;
-                z-index: 2;
-                input {
-                    width: 100%;
-                    border: 0;
-                    outline: 0;
-                    background: transparent;
-                }
-            }
-        }
-    }
 
     input[type=submit] {
         display: none;
