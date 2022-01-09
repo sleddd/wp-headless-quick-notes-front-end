@@ -3,10 +3,15 @@ import { graphql } from "@apollo/react-hoc";
 import { compose } from 'recompose';
 import { IconPickerItem } from "react-fa-icon-picker";
 import GET_TOPICS from "../../graphql/queries/getTopics";
+import { useToggleClass } from "../../hooks/use-toggle-class";
 import "./topicPicker.scss";
 
 const TopicPicker = (props) => {
-    const [pickerState, setPickerState] = useState('closed');
+    const [toggleClass, toggle] = useToggleClass('closed', {
+        open: 'closed',
+        closed: 'open'
+      });
+    
     const [topics, setTopics ] = useState([]);   
     const [ selectedTopic, setSelectedTopic ] = useState(props.currentTopic);
     useEffect(()=>{
@@ -23,13 +28,6 @@ const TopicPicker = (props) => {
         setTopics( filteredTopics ); 
     }, [props.topicQuery]);
 
-    const pickerStateHandler = () => {
-        if ( 'closed' === pickerState ) {
-            setPickerState('open');
-        } else {
-            setPickerState('closed');
-        }
-    }
     
     const topicSelectedHandler = (e) => {
         let filteredTopics = [];
@@ -46,10 +44,10 @@ const TopicPicker = (props) => {
         setTopics(filteredTopics);
     };
     return (
-        <div className="topicPicker" onClick={pickerStateHandler} >
+        <div className="topicPicker" onClick={toggle} >
             <input className="selected-topic" type="hidden" value={selectedTopic} />
             <div className="topic">
-                <div className={`topic__options ${pickerState}`}>
+                <div className={`topic__options ${toggleClass}`}>
                { topics.map( (topic) =>{ return(
                 <>
                  <IconPickerItem

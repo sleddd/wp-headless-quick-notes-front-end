@@ -14,8 +14,8 @@ import { useToggleClass } from "../../hooks/use-toggle-class";
 
 import "./navbar.scss";
 
-const Navbar = (props) => {
-  const [toggleClass, toggle] = useToggleClass('open', {
+const Navbar = () => {
+  const [toggleClass, toggle] = useToggleClass('closed', {
     open: 'closed',
     closed: 'open'
   });
