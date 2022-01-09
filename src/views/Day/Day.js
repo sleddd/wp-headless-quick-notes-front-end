@@ -1,74 +1,142 @@
 import React, { Fragment, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { gql, useQuery } from '@apollo/client';
+import { graphql } from "@apollo/react-hoc";
+import { compose } from 'recompose';
+import GET_JOURNAL from "../../graphql/queries/getJournalByDate";
+import UPDATE_JOURNAL from "../../graphql/mutations/updateJournal";
+import CREATE_JOURNAL from "../../graphql/mutations/createJournal";
+import DELETE_JOURNAL from "../../graphql/mutations/deleteJournal";
 import FullWidthBackground from "../../components/Background/FullWidthBackground";
 import Navbar from "../Navbar/navbar";
-import { IconPickerItem } from "react-fa-icon-picker";
+import TopicPicker from "../../components/TopicPicker/TopicPicker";
 import { months } from "../../lib/dates";
+import useAuth from "../../hooks/use-auth";
 import "./day.scss";
 
-const getItemsQuery = (month, day, year ) => gql`
-  query {
-    journals(where: {dateQuery: {month: ${month}, day: ${day}, year: ${year}}}) {
-      edges {
-        node {
-          title
-          customFields {
-            journalEntryFieldTitle
-          }
-          topics {
-            edges {
-              node {
-                name
-                customFields {
-                  journalTopicFieldColor
-                  journalTopicFieldIcon
-                }
-              }
-            }
-          }
-        }
-      }
-    }  
-  }
-`;
- 
-const Day = (props) => {
-  const params = useParams();
-  const { loading, error, data } = useQuery(getItemsQuery(params.month, params.day, params.year));
+const Day = ({ journalQuery, updateJournal, createJournal, deleteJournal, match: { params: { day, month, year } } }) => {
+  const journal = journalQuery.journals ? journalQuery.journals.nodes : [];
+  const { user, loggedIn, loading } = useAuth();
+  console.log('user', user);
+  console.log('logged',loggedIn);
 
-  if (  ! loading ) {
-    console.log(data.journals.edges);
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    if ( e.target.getAttribute('data-id') ) {
+
+    }
+    const listItems = document.querySelectorAll('li');
+    const entries = [];
+    // Loop through inputs.. 
+    listItems.forEach(listItem => {
+      // Grab inputs for each item 
+      const inputs = listItem.querySelectorAll('input');
+
+      // Set up your input variables 
+      let id = ''
+      let title = '';
+      let topicId = '';
+
+      inputs.forEach(input => {
+        if (input.id.indexOf('entry-title') != -1) {
+          title = input.value;
+        }
+        if (input.id.indexOf('entry-id') != -1) {
+          id = input.value;
+        }
+        if (input.classList.contains('selected-topic')) {
+          console.log(input.value);
+          topicId = input.value;
+        }
+      });
+      entries.push({
+        id: id,
+        title: title,
+        topicId: topicId
+      });
+    });
+
+    // Post entries 
+    entries.forEach(entry => {
+      if ( entry.id.length > 0 ) {
+        if ( 0 && entry.title.length > 0 && entry.topicId.length > 0 ) {
+          // Update entry 
+          updateJournal({
+            variables: {
+              id: entry.id,
+              journal_entry_field_title: entry.title,
+              topicId: entry.topicId
+            },
+          });
+        }
+      } else {
+        if ( entry.title.length > 1 && entry.topicId.length > 1 ) {
+          createJournal({
+            variables: {
+              id: entry.id,
+              journal_entry_field_title: entry.title,
+              topicId: entry.topicId,
+              title: `Journal Item Dated ${new Date()}`
+            }
+          });
+        }
+      } 
+    });
+  }
+
+  const deleteJournalHandler = (e) => {
+    const idToRemove = e.target.getAttribute('data-id');
+    deleteJournal({
+      variables: {
+        id: idToRemove
+      }
+    });
   }
 
   return (
     <Fragment>
       <FullWidthBackground id="main" />
-      <Navbar/>
-      <div className="day">
-        <h1>{months[params.month - 1]} {params.day}, {params.year}</h1>
-        <ul>
-          { ! loading ? data.journals.edges.map( (journalItem) => {
-            return (
-              <li key={journalItem.node.id}>
-                <div class="topic">
-                  <IconPickerItem
-                    icon={journalItem.node.topics.edges[0].node.customFields.journalTopicFieldIcon}
-                    size={24}
-                    color={journalItem.node.topics.edges[0].node.customFields.journalTopicFieldColor}
-                    onClick={() => {}}
-                  />
+      <Navbar />
+      <form id="journalEntries" onSubmit={onSubmitHandler}>
+        <div className="day">
+          <h1>{months[month - 1]} {day}, {year}</h1>
+          <ul>
+            {journal.map((journalItem) => (
+              <li key={journalItem.journalId}>
+                <div className="topic">
+                  <TopicPicker currentTopic={journalItem.topics.nodes[0].id} />
                 </div>
-                <div class="entry">
-                  {journalItem.node.customFields.journalEntryFieldTitle}
+                <div className="entry">
+                  <input id={`entry-title-${journalItem.journalId}`} type="text" defaultValue={journalItem.customFields.journalEntryFieldTitle} />
+                  <input id={`entry-id-${journalItem.id}`} type="hidden" value={journalItem.id} />
                 </div>
+                <button type="button" data-id={journalItem.id} onClick={deleteJournalHandler}>Remove</button>
               </li>
-            )
-          }) : '' }
-        </ul>
-      </div>
+            ))}
+            <li key="NewEntryItem">
+              <TopicPicker />
+              <div className="entry">
+                <input id="entry-title" type="text" defaultValue="" placeholder="Enter title" />
+              </div>
+            </li>
+          </ul>
+          <input type="submit" value="Submit" />
+        </div>
+      </form>
     </Fragment>
   );
 };
 
-export default Day;
+export default compose(
+  graphql(GET_JOURNAL, {
+    name: 'journalQuery',
+    options: (props) => ({
+      variables: {
+        month: parseInt(props.match.params.month),
+        day: parseInt(props.match.params.day),
+        year: parseInt(props.match.params.year)
+      }
+    })
+  }),
+  graphql(UPDATE_JOURNAL, { name: 'updateJournal' }),
+  graphql(CREATE_JOURNAL, { name: 'createJournal' }),
+  graphql(DELETE_JOURNAL, { name: 'deleteJournal' })
+)(Day);

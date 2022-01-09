@@ -1,21 +1,13 @@
+/*
+* External dependencies
+*/
+import React from 'react';
 import { render } from "react-dom";
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  gql, 
-  useQuery
-} from "@apollo/client";
+
+/*
+* Internal dependencies
+*/
 import App from "./App";
 
-const client = new ApolloClient({
-  uri: 'http://journal.local/graphql',
-  cache: new InMemoryCache()
-});
+render(<App />, document.getElementById("root"));
 
-render(
-  <ApolloProvider client={client}>
-  <App />
-  </ApolloProvider>,
-  document.getElementById("root")
-);

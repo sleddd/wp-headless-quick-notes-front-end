@@ -1,0 +1,35 @@
+.topicPicker {
+    .topic {
+        &__options {
+            position: absolute;
+            background: #ededed;
+            top: .6rem;
+            padding: 0;
+            z-index: 0;
+            div {
+                display: none;
+                margin-right: 4px;
+                border: 2px solid #ededed;
+                &:nth-child(1) {
+                    display: inline;
+                }
+                
+            }
+            &.open { 
+                z-index: 3;
+                width: calc(100% - 1rem);
+                div { 
+                    display: inline;
+                    border: 2px solid #fff;
+                    &:hover {
+                        border-color: #ccc;
+                    }
+                }
+            }
+            &.closed {
+                width: auto;
+                z-index: 0;
+            }
+        }
+    }
+}

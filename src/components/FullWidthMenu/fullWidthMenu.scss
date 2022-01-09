@@ -1,0 +1,42 @@
+#menu {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    height: 0;
+    min-height: 0;
+    background: #202020;
+    overflow-y: auto;
+    z-index: 99;
+
+    &.open {
+        animation: slideDown linear .5s 1 normal forwards;
+    }
+
+    &.closed {
+        animation: slideUp linear .5s 1 normal forwards;
+    }
+
+    @keyframes slideUp {
+        from {
+          height: auto; 
+          min-height: calc( 100% - 60px);
+        }
+        to {
+            height: 0;
+            min-height: 0;
+        }
+    }
+
+    @keyframes slideDown {
+        from {
+          height: 0;
+          min-height: 0;
+        }
+        to {
+          height: auto; 
+          min-height: calc( 100% - 60px);
+        }
+    }
+}
