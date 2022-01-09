@@ -1,7 +1,7 @@
 # Quick Notes 
 by Claudette M Raynor - Currently a work in progress
 
-Quick notes is a simply note taking app built using WordPress, React, and GraphQL.
+Quick notes is a simple note taking app built using WordPress, React, and GraphQL.
 
 ----
 It originally started as a typescript experiment (general excuse to practice typescript while learning) and has evolved over time into a sandbox app to test out headless WordPress.
