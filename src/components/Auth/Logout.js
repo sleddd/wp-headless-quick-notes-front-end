@@ -29,7 +29,7 @@ export const Logout = (props) => {
   
     return(
         <div id="logoutForm">
-            <h1>{`Hello ${user.firstName}!`}</h1>
+            <h1>{`Hello ${ user ? user.firstName : ''}!`}</h1>
             <button onClick={handleLogout}>LOGOUT</button> 
         </div>
     );

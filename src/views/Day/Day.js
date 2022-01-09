@@ -25,7 +25,7 @@ const Day = ({
   deleteJournal,
   match: { params: { day, month, year } } }) => {
 
-  const { user, loggedIn, loading } = useAuth();
+  const { user, loggedIn } = useAuth();
   let journal = journalQuery.journals ? journalQuery.journals.nodes : [];
 
   useEffect(() => {
@@ -73,42 +73,49 @@ const Day = ({
 
     // Post entries 
     entries.forEach(entry => {
-      console.log(entry.title,entry.topicId);
-      if (entry.id.length > 1) {
-        // Update entry 
-        updateJournal({
-          variables: {
-            id: entry.id,
-            topicId: entry.topicId,
-            journal_entry_field_title: entry.title,
-          },
-        });
-        journalQuery.refetch();
-      } else {
-        if (entry.title.length > 1 ) {
-          // Create entry
-          const test = createJournal({
+      if (loggedIn && user && user.capabilities.indexOf('edit_posts') != -1) {
+        if (entry.id.length > 1) {
+          // Update entry 
+          updateJournal({
             variables: {
-              journal_entry_field_title: entry.title,
+              id: entry.id,
               topicId: entry.topicId,
-              title: `Journal Item Dated ${new Date()}`
-            }
+              journal_entry_field_title: entry.title,
+            },
           });
-          entry.idElement.value = "";
-          entry.titleElement.value = "";
           journalQuery.refetch();
+        } else {
+          if (entry.title.length > 1) {
+            // Create entry
+            const test = createJournal({
+              variables: {
+                journal_entry_field_title: entry.title,
+                topicId: entry.topicId,
+                title: `Journal Item Dated ${new Date()}`
+              }
+            });
+            entry.idElement.value = "";
+            entry.titleElement.value = "";
+            journalQuery.refetch();
+          }
         }
+      } else {
+        alert('You must be logged in to add new items.');
       }
     });
   }
 
   const deleteItemHandler = (e) => {
-    deleteJournal({
-      variables: {
-        id: e.target.value
-      }
-    });
-    journalQuery.refetch();
+    if (loggedIn && user && user.capabilities.indexOf('edit_posts') != -1) {
+      deleteJournal({
+        variables: {
+          id: e.target.value
+        }
+      });
+      journalQuery.refetch();
+    } else {
+      alert('You must be logged in to add new items.');
+    }
   }
 
   return (
