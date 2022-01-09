@@ -35,14 +35,14 @@ export default function LogInForm() {
 
   return (
     <AuthProvider>
-      <form method="post" onSubmit={handleSubmit}>
+      <form id="loginForm" method="post" onSubmit={handleSubmit}>
         <h1>Login</h1>
         <label>Username:</label>
-        <input type="email" name="email" id="email" autoComplete="email"/> 
+        <input type="email" name="email" id="email" autoComplete="email" />
         <label>Password:</label>
-        <input type="password" name="password" id="password" autoComplete="password"/>
+        <input type="password" name="password" id="password" autoComplete="password" />
         <input type="submit"></input>
-    </form>
+      </form>
     </AuthProvider>
   );
 }

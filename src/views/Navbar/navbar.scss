@@ -16,12 +16,13 @@
         align-items: flex-end;
         width: 30px;
         height: 20px;
-        margin-top: 0.8rem;
+        margin-top: 1.9rem;
 
         div {
             background: white;
             width: 100%;
             height: 2px;
+            transition: all .2s ease-in-out;
 
             &:nth-child(2) {
                 width: 20px;
@@ -30,6 +31,24 @@
             &:nth-child(3) {
                 width: 10px;
             }    
+        }
+
+        &.open {
+            div {
+                &:nth-child(1) {
+                    transform: rotate(45deg);
+                }
+                &:nth-child(2) {
+                    display: none;
+                    width: 20px;
+                }
+
+                &:nth-child(3) {
+                    transform: rotate(-45deg);
+                    width: 30px;
+                    margin-bottom: 18px;
+                }    
+            }
         }
     }
 }

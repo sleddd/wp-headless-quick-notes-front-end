@@ -26,7 +26,7 @@ const Navbar = () => {
         <Link to="/">
           <Clock className="clock" />
         </Link>
-        <div className="hamburger" onClick={toggle}>
+        <div className={`hamburger ${toggleClass}`} onClick={toggle}>
           <div></div>
           <div></div>
           <div></div>

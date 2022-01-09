@@ -7,15 +7,53 @@
     height: 0;
     min-height: 0;
     background: #202020;
-    overflow-y: auto;
+    overflow-y: hidden;
     z-index: 99;
+    color: #fff;
 
-    &.open {
-        animation: slideDown linear .5s 1 normal forwards;
+    #loginForm {
+      max-width: 320px;
+      display: flex;
+      flex-direction: column;
+      padding: 2rem;
+      font-family: 'Montesserat', sans-serif;
+      font-weight: 400;
+
+      label, input, h1 {
+        flex: 0 0 100%;
+        font-family: 'Montesserat', sans-serif;
+      }
+
+      label {
+        padding: 1.3rem 0 .5rem 0;
+      }
+
+      input {
+        border: 0px;
+        outline: 0px;
+        padding: 0.5rem;
+        color: #555;
+      }
+
+      input[type=submit] {
+        color: #fff;
+        background: #16a085;
+        text-transform: uppercase;
+        margin-top: 1.2rem;
+        padding: 0.5rem;
+        max-width: 100px;
+        border-radius: 3px;
+        font-weight: 200;
+        font-size: .8rem;
+        letter-spacing: .06rem;
+        &:hover {
+          background: #127c68;
+        }
+      }
     }
 
-    &.closed {
-        animation: slideUp linear .5s 1 normal forwards;
+    &.open {
+        animation: slideDown linear .3s 1 normal forwards;
     }
 
     @keyframes slideUp {
