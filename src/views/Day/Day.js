@@ -1,9 +1,10 @@
 /*
 * External Dependencies
 */
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import { graphql } from "@apollo/react-hoc";
 import { compose } from 'recompose';
+import { cache } from '../../hooks/use-app-apollo';
 
 /*
 * Internal Dependencies
@@ -96,7 +97,7 @@ const Day = ({
             });
             entry.idElement.value = "";
             entry.titleElement.value = "";
-            journalQuery.refetch();
+            journalQuery.refetch({update: (cache, {data: {journalQuery}})});
           }
         }
       } else {
