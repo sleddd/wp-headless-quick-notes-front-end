@@ -15,6 +15,7 @@ import { store } from "./redux/store";
 import { useApolloClient } from "./hooks/use-app-apollo";
 import { AuthProvider } from "./hooks/use-auth";
 
+
 /*
 * Styles
 */

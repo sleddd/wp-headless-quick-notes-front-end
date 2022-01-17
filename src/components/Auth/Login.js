@@ -6,10 +6,8 @@ import { Logout } from "../../components/Auth/Logout";
 
 const LOG_IN = gql`
   mutation logIn($login: String!, $password: String!) {
-    loginWithCookies(input: {
-      login: $login
-      password: $password
-    }) {
+    loginWithCookies(input: {login: $login, password: $password }) {
+      clientMutationId
       status
     }
   }
@@ -18,13 +16,13 @@ const LOG_IN = gql`
 
 export default function LogInForm() {
   const { loggedIn } = useAuth();
-  const [logIn, { data, query, loading, error }] = useMutation(LOG_IN, {
+  const [logIn, { data, query, loading, error }] = useMutation( LOG_IN, {
     refetchQueries: [
       { query: GET_USER }
     ],
   });
 
-
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData            = new FormData(event.currentTarget);

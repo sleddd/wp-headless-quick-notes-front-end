@@ -8,6 +8,24 @@ mutation MyMutation( $journal_entry_field_title: String!, $topicId: ID!, $title:
     journal {
       id
       journalId
+      title
+      customFields {
+        journalEntryFieldTitle
+        journalEntryFieldImage {
+          mediaItemUrl
+        }
+      }
+      topics {
+        nodes {
+          id
+          topicId
+          name
+          customFields {
+            journalTopicFieldColor
+            journalTopicFieldIcon
+          }
+        }
+      }
     }
   }
 }`;

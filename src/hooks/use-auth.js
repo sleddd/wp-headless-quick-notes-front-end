@@ -1,4 +1,5 @@
 import { useQuery, gql } from "@apollo/client";
+import { useDispatch } from "react-redux";
 import React, { createContext, useContext } from "react";
 
 const DEFAULT_STATE = {
@@ -8,7 +9,7 @@ const DEFAULT_STATE = {
   error: undefined,
 };
 
-const AuthContext = createContext(DEFAULT_STATE);
+export const AuthContext = createContext(DEFAULT_STATE);
 
 export const GET_USER = gql`
   query getUser {

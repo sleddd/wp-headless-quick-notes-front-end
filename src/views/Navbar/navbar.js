@@ -11,7 +11,6 @@ import { Clock } from "../../components/Clock/Clock";
 import FullWidthMenu from "../../components/FullWidthMenu/FullWidthMenu";
 import { useToggleClass } from "../../hooks/use-toggle-class";
 
-
 import "./navbar.scss";
 
 const Navbar = () => {

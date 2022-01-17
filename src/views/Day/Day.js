@@ -1,10 +1,10 @@
 /*
 * External Dependencies
 */
-import React, { Fragment, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useQuery } from "@apollo/client";
 import { graphql } from "@apollo/react-hoc";
 import { compose } from 'recompose';
-import { cache } from '../../hooks/use-app-apollo';
 
 /*
 * Internal Dependencies
@@ -20,19 +20,27 @@ import useAuth from "../../hooks/use-auth";
 import "./day.scss";
 
 const Day = ({
-  journalQuery,
   updateJournal,
   createJournal,
   deleteJournal,
   match: { params: { day, month, year } } }) => {
 
   const { user, loggedIn } = useAuth();
-  let journal = journalQuery.journals ? journalQuery.journals.nodes : [];
+  const userID = user ? user.databaseId : 0;
+  const journalQuery = useQuery(queries.getJournalByDate, {
+    variables: {
+      month: parseInt(month),
+      day: parseInt(day),
+      year: parseInt(year),
+      author: parseInt(userID)
+    }
+  });
+
+  let journal = journalQuery.data && journalQuery.data.journals ? journalQuery.data.journals.nodes : [];
 
   useEffect(() => {
     journalQuery.refetch();
   }, [createJournal, updateJournal, deleteJournal])
-
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
@@ -74,7 +82,7 @@ const Day = ({
 
     // Post entries 
     entries.forEach(entry => {
-      if (loggedIn && user && user.capabilities.indexOf('edit_posts') != -1) {
+      if (loggedIn && user && user.capabilities.indexOf('edit_private_posts') != -1) {
         if (entry.id.length > 1) {
           // Update entry 
           updateJournal({
@@ -88,16 +96,30 @@ const Day = ({
         } else {
           if (entry.title.length > 1) {
             // Create entry
-            const test = createJournal({
+            createJournal({
               variables: {
                 journal_entry_field_title: entry.title,
                 topicId: entry.topicId,
                 title: `Journal Item Dated ${new Date()}`
+              },
+              update(cache, { data }) {
+                journalQuery.refetch();
+                journal = journalQuery.data && journalQuery.data.journals ? journalQuery.data.journals.nodes : [];
+                cache.writeQuery({
+                  query: queries.getJournalByDate,
+                  data: {
+                    journals: {
+                      nodes: [
+                        ...journal,
+                        data.createJournal.journal,
+                      ]
+                    },
+                  },
+                });
               }
             });
             entry.idElement.value = "";
             entry.titleElement.value = "";
-            journalQuery.refetch({update: (cache, {data: {journalQuery}})});
           }
         }
       } else {
@@ -120,7 +142,7 @@ const Day = ({
   }
 
   return (
-    <Fragment>
+    <>
       <FullWidthBackground id="main" />
       <Navbar />
       <form method="post" onSubmit={onSubmitHandler}>
@@ -133,21 +155,11 @@ const Day = ({
           <input type="submit" value="Submit" />
         </div>
       </form>
-    </Fragment>
+    </>
   );
 };
 
 export default compose(
-  graphql(queries.getJournalByDate, {
-    name: 'journalQuery',
-    options: (props) => ({
-      variables: {
-        month: parseInt(props.match.params.month),
-        day: parseInt(props.match.params.day),
-        year: parseInt(props.match.params.year)
-      }
-    })
-  }),
   graphql(mutations.updateJournal, { name: 'updateJournal' }),
   graphql(mutations.createJournal, { name: 'createJournal' }),
   graphql(mutations.deleteJournal, { name: 'deleteJournal' })

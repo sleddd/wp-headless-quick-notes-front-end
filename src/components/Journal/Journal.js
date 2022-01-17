@@ -12,7 +12,7 @@ import "./journal.scss";
 
 export const Journal = (props) => (
     <ul className="journal">
-        {props.journal.map((journalItem) => (
+        {props.journal.map((journalItem) =>{ console.log('journalid', journalItem.id); return(
             <JournalItem
                 key={`journalItem-${journalItem.id}`}
                 id={journalItem.id}
@@ -20,7 +20,7 @@ export const Journal = (props) => (
                 title={journalItem.customFields.journalEntryFieldTitle}
                 topicId={journalItem.topics.nodes[0].id}
                 deleteItemHandler={props.deleteItemHandler} />
-        ))}
+        )})}
         <JournalItemNew />
     </ul>
 );
