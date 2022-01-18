@@ -40,7 +40,16 @@ const Day = ({
 
   useEffect(() => {
     journalQuery.refetch();
-  }, [createJournal, updateJournal, deleteJournal])
+  }, [createJournal, updateJournal, deleteJournal]);
+
+  const onEnterHandler = (e) => {
+    // Submit on enter.
+    e.preventDefault();
+    if (e.keyCode == 13 && e.shiftKey == false) {
+      e.preventDefault();
+      onSubmitHandler(e);
+    }
+  }
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
@@ -49,7 +58,9 @@ const Day = ({
     // Loop through inputs.. 
     listItems.forEach(listItem => {
       // Grab inputs for each item 
-      const inputs = listItem.querySelectorAll('input');
+      const textareas = listItem.querySelectorAll('textarea');
+      const other = listItem.querySelectorAll('input');
+      const inputs = [...textareas, ...other];
 
       // Set up your input variables 
       let id = ''
@@ -71,6 +82,7 @@ const Day = ({
           topicId = input.value;
         }
       });
+      console.log(entries);
       entries.push({
         id: id,
         title: title,
@@ -79,7 +91,6 @@ const Day = ({
         titleElement: titleElement
       });
     });
-
     // Post entries 
     entries.forEach(entry => {
       if (loggedIn && user && user.capabilities.indexOf('edit_private_posts') != -1) {
@@ -145,15 +156,19 @@ const Day = ({
     <>
       <FullWidthBackground id="main" />
       <Navbar />
-      <form method="post" onSubmit={onSubmitHandler}>
-        <div className="day">
-          <h1>{months[month - 1]} {day}, {year}</h1>
-          <Journal
-            journal={journal}
-            deleteItemHandler={deleteItemHandler}
-          />
-          <input type="submit" value="Submit" />
-        </div>
+      <form
+        id="dayForm"
+        className="day"
+        method="post"
+        onSubmit={onSubmitHandler}
+        autoComplete="off">
+        <h1>{months[month - 1]} {day}, {year}</h1>
+        <Journal
+          journal={journal}
+          deleteItemHandler={deleteItemHandler}
+          onEnterHandler={onEnterHandler}
+        />
+        <input type="submit" value="Submit" />
       </form>
     </>
   );

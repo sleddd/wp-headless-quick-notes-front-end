@@ -1,13 +1,15 @@
 import React from "react";
 import TopicPicker from "../TopicPicker/TopicPicker";
 import useAuth from "../../hooks/use-auth";
+import TextareaAutosize from 'react-textarea-autosize';
 
 export const JournalItem = ({
     id,
     journalId,
     topicId,
     title,
-    deleteItemHandler
+    deleteItemHandler,
+    onEnterHandler
 }) => {
     const { user, loggedIn } = useAuth();
     return (
@@ -20,7 +22,13 @@ export const JournalItem = ({
                     currentTopic={topicId} />
             </div>
             <div className="journal__item__entry">
-                <input id={`item-title-${journalId}`} type="text" autoComplete="off" data-lpignore="true" defaultValue={title} />
+                <TextareaAutosize 
+                    id={`item-title-${journalId}`} 
+                    className="grow-wrap"
+                    rows="1" 
+                    defaultValue={title}
+                    onKeyUp={onEnterHandler}
+                />
                 <input id={`item-id-${journalId}`} type="hidden" value={id} />
             </div>
             <input 

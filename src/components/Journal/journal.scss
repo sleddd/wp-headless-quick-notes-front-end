@@ -36,6 +36,21 @@
                 outline: 0;
                 background: transparent;
             }
+
+            textarea {
+                display: grid;
+                width: 95%;
+                padding: 0px 0;
+                outline: 0;
+                border: 0;
+                background: transparent;
+                margin-top: 3px;
+                height: auto;
+                display: block;
+                min-height: 25px;
+                line-height: 1.6;
+                overflow:hidden;
+            }
         }
 
         &__remove {
