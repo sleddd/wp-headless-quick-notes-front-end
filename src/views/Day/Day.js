@@ -44,9 +44,7 @@ const Day = ({
 
   const onEnterHandler = (e) => {
     // Submit on enter.
-    e.preventDefault();
     if (e.keyCode == 13 && e.shiftKey == false) {
-      e.preventDefault();
       onSubmitHandler(e);
     }
   }
