@@ -6,7 +6,7 @@ workflows:
       - npmbuild_and_run
       - pantheon/push:
           requires:
-            - npmbuild_and_persist
+            - npmbuild_and_run
           checkout: false
           pre-steps:
             - checkout
