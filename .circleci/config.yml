@@ -1,9 +1,9 @@
 version: 2.1
 workflows:
   version: 2
-  compile_sass_and_push:
+  build:
     jobs:
-      - npmbuild_and_persist
+      - npmbuild_and_run
       - pantheon/push:
           requires:
             - npmbuild_and_persist
@@ -13,7 +13,7 @@ workflows:
 orbs:
   pantheon: pantheon-systems/pantheon@0.1.0
 jobs:
-  npmbuild_and_persist:
+  npmbuild_and_run:
     docker:
       - image: 'node:14.16.0'
     steps:
