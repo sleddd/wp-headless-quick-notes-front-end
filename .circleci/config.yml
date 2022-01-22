@@ -1,34 +1,36 @@
-# This config is equivalent to both the '.circleci/extended/orb-free.yml' and the base '.circleci/config.yml'
 version: 2.1
-
-# Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
-# See: https://circleci.com/docs/2.0/orb-intro/
-orbs:
-  node: circleci/node@14.16.0
-  pantheon: pantheon-systems/pantheon@0.6.0
-
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  build:
+  version: 2
+  compile_sass_and_push:
     jobs:
+      - npmbuild_and_persist
       - pantheon/push:
-        checkout: false
-        terminus_clone_env: "dev"
+          requires:
+            - npmbuild_and_persist
+          checkout: false
           pre-steps:
             - checkout
-            - run:
-              name: Node Install
-              command: npm it
-            # Cache node_modules so the packages don't need to be redownloaded next time.
-            - save_cache:
-                name: Save Node Cache
-                key: drupal-node-{{ checksum "package-lock.json" }}
-                paths:
-                  - node_modules
-            - run: Start app
-              command: npm run start      
-          filters:
-            branches:
-              ignore:
-                - master
+            - attach_workspace:
+                at: .
+            - run: npm install 
+orbs:
+  pantheon: pantheon-systems/pantheon@0.1.0
+jobs:
+  npmbuild_and_persist:
+    docker:
+      - image: 'node:10.15.3'
+    steps:
+      - checkout
+      - run:
+          name: install npm dependencies 
+          command: npm install
+      - run:
+          name: run build
+          command: npm run build
+      - run:
+          name: start app
+          command: npm run start
+      - persist_to_workspace:
+          root: .
+          paths:
+            - /
