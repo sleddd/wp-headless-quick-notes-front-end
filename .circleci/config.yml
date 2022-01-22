@@ -10,16 +10,16 @@ orbs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  update-server:
-      jobs:
-         - pantheon/push:
-          checkout: false
-          terminus_clone_env: "dev"
+  build:
+    jobs:
+      - pantheon/push:
+        checkout: false
+        terminus_clone_env: "dev"
           pre-steps:
             - checkout
             - run:
-                name: Node Install
-                command: npm it
+              name: Node Install
+              command: npm it
             # Cache node_modules so the packages don't need to be redownloaded next time.
             - save_cache:
                 name: Save Node Cache
