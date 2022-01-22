@@ -9,9 +9,9 @@ import {
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 
 export const cache = new InMemoryCache({});
-
+console.log(process.env.GRAPHQL);
 const httpLink = new BatchHttpLink({
-    uri: 'https://admin.journal.local/graphql',
+    uri: process.env.REACT_APP_GRAPHQL,
     credentials: 'include'
 });
 

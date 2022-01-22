@@ -26,4 +26,4 @@ jobs:
           command: npm run build
       - run:
           name: start app
-          command: npm run start
+          command: npm run serve
