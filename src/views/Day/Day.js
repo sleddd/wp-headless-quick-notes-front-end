@@ -65,7 +65,7 @@ const Day = ({
       // Set up your input variables 
       let id = ''
       let title = '';
-      let topicId = '';
+      let topicId = 'dGVybToy';
       let titleElement = null;
       let idElement = null;
 
@@ -82,7 +82,7 @@ const Day = ({
           topicId = input.value;
         }
       });
-      console.log(entries);
+
       entries.push({
         id: id,
         title: title,

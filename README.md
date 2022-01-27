@@ -16,4 +16,9 @@ Backend plugin: https://github.com/sleddd/wp-headless-quick-notes-back-end.git
 ![Screen Shot 2022-01-09 at 2 05 43 AM](https://user-images.githubusercontent.com/1176945/148678632-a7c49816-7865-48c4-ac8e-351a7a81482a.png)
 ![Screen Shot 2022-01-09 at 2 04 27 AM](https://user-images.githubusercontent.com/1176945/148678633-7b983266-8f22-41c6-80e8-2f9176351ce8.png)
 
+=== DEMO === \
+Demo is still under construction. It is locked, but can be found at: \
+https://dev-quicknotes.pantheonsite.io/ \
+https://dev-quicknotes-admin.pantheonsite.io/
+
 

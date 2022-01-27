@@ -10,6 +10,7 @@
   "author": "Claudette Raynor",
   "main": "src/index.tsx",
   "license": "(MIT OR Apache-2.0)",
+  "homepage": ".", 
   "dependencies": {
     "@apollo/client": "^3.5.6",
     "@apollo/react-hoc": "^4.0.0",
@@ -78,7 +79,7 @@
   },
   "scripts": {
     "start": "HTTPS=true react-scripts start",
-    "build": "react-scripts build",
+    "build": "BUILD_PATH='./web' react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
