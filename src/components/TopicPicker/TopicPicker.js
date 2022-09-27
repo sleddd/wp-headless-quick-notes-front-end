@@ -52,7 +52,7 @@ const TopicPicker = (props) => {
             <input className="topicPicker__selected-topic" type="hidden" value={selectedTopic} />
             <div className="topicPicker__topic">
                 <div className={`topicPicker__topic__options ${toggleClass}`}>
-                    {topics.map((topic) => {
+                    {topics.map((topic, topicIndex ) => {
                         return (
                             <>
                                 <IconPickerItem

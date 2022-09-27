@@ -18,6 +18,7 @@ export const JournalItem = ({
         <li className="journal__item">
             <div className="journal__item__topic">
                 <TopicPicker
+                    pickerKey={`item-${journalId}-${topicId}`}
                     key={`item-${journalId}-${topicId}`}
                     currentTopic={topicId} />
             </div>

@@ -13,6 +13,7 @@ import { queries } from "../../graphql/queries/queries";
 import { mutations } from "../../graphql/mutations/mutations";
 import FullWidthBackground from "../../components/Background/FullWidthBackground";
 import Navbar from "../Navbar/navbar";
+import { DayNav } from "../Day/DayNav";
 import { Journal } from "../../components/Journal/Journal";
 import { months } from "../../lib/dates";
 import useAuth from "../../hooks/use-auth";
@@ -85,7 +86,7 @@ const Day = ({
 
       entries.push({
         id: id,
-        title: title,
+        title: title.trim(),
         topicId: topicId,
         idElement: idElement,
         titleElement: titleElement
@@ -100,7 +101,7 @@ const Day = ({
             variables: {
               id: entry.id,
               topicId: entry.topicId,
-              journal_entry_field_title: entry.title,
+              journal_entry_field_title: entry.title.trim(),
             },
           });
           journalQuery.refetch();
@@ -109,7 +110,7 @@ const Day = ({
             // Create entry
             createJournal({
               variables: {
-                journal_entry_field_title: entry.title,
+                journal_entry_field_title: entry.title.trim(),
                 topicId: entry.topicId,
                 title: `Journal Item Dated ${new Date()}`
               },
@@ -162,7 +163,7 @@ const Day = ({
         method="post"
         onSubmit={onSubmitHandler}
         autoComplete="off">
-        <h1>{months[month - 1]} {day}, {year}</h1>
+        <DayNav month={parseInt(month)} day={parseInt(day)} year={year}/>
         <Journal
           journal={journal}
           deleteItemHandler={deleteItemHandler}
