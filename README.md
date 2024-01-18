@@ -1,5 +1,5 @@
-# Quick Notes 
-by Claudette M Raynor - Currently a work in progress
+# WIP - Quick Notes 
+by Claudette M Raynor
 
 Quick notes is a simple note taking app built using WordPress, React, and GraphQL.
 
